@@ -13,6 +13,7 @@
 - **안정적인 윈도우 처리**: 로블록스 창을 닫았다가 다시 실행해도 자동으로 새로운 창을 찾아 모니터링을 재개합니다.
 - **화면 깨짐 방지**: 캡처된 화면이 비정상적인 흰색 화면일 경우, 이를 감지하고 재시도하여 오탐을 줄입니다.
 - **Anti-AFK 키 입력**: 설정된 간격으로 자동으로 키를 입력하여 로블록스 게임이 비활성화로 인해 종료되는 것을 방지합니다.
+- **캡처 토글 단축키**: 전역 단축키를 통해 실시간으로 모니터링 기능을 활성화/비활성화할 수 있습니다.
 
 ## 동작 방식
 
@@ -47,6 +48,7 @@ brightness_threshold = 200
 white_screen_threshold = 0.8
 key_press_interval_minutes = 15
 key_press_code = b
+capture_toggle_key = ctrl + [
 ```
 
 | 설정 항목 | 설명 | 기본값 |
@@ -62,6 +64,7 @@ key_press_code = b
 | `white_screen_threshold` | 이미지가 흰색 화면으로 간주될 밝은 픽셀의 비율(0.0-1.0)입니다. | `0.8` |
 | `key_press_interval_minutes` | **(선택)** Anti-AFK 키 입력 간격(분)입니다. 0이면 비활성화됩니다. | `15` |
 | `key_press_code` | **(선택)** Anti-AFK에서 입력할 키 코드입니다. (a-z, 0-9, f1-f12 등) | `b` |
+| `capture_toggle_key` | **(선택)** 모니터링을 토글할 전역 단축키입니다. (예: ctrl + [, alt + f1) | 없음 |
 
 
 ## Discord 알림 예시
@@ -86,6 +89,38 @@ Github 파일 용량 제한으로 20메가씩 분할 압축이 되어있으니 `
 또는 cmd 창을 열어 RobloxWindowMonitorV2.exe 실행
 ```
 *참고: 같은 디렉토리에 config.ini 파일이 존재해야 합니다.*
+
+### Anti-AFK 기능 사용법
+
+Anti-AFK(Away From Keyboard) 기능은 로블록스 게임이 비활성화로 인해 자동으로 종료되는 것을 방지하는 기능입니다.
+
+1. `config.ini` 파일에서 다음 설정을 조정합니다:
+   - `key_press_interval_minutes`: 키를 입력할 시간 간격(분). 0으로 설정하면 기능이 비활성화됩니다.
+   - `key_press_code`: 입력할 키 (예: `b`, `space`, `f9` 등)
+
+2. 프로그램이 실행되면 설정된 간격마다 자동으로 키가 입력됩니다.
+
+3. 키 입력은 백그라운드에서 이루어지므로 사용자의 다른 작업을 방해하지 않습니다.
+
+**지원되는 키 코드**: a-z, 0-9, f1-f12, space, enter, backspace, tab 등
+
+### 캡처 토글 단축키 기능
+
+캡처 토글 기능을 사용하면 프로그램을 종료하지 않고도 실시간으로 모니터링을 활성화/비활성화할 수 있습니다.
+
+1. `config.ini` 파일에서 `capture_toggle_key` 설정을 조정합니다:
+   - 예시: `ctrl + [`, `alt + f1`, `ctrl + shift + m` 등
+   - 비워두면 토글 기능이 비활성화됩니다.
+
+2. 프로그램 실행 중 설정된 단축키를 누르면 모니터링 상태가 토글됩니다:
+   - **ENABLED**: 화면 변화 감지 및 Discord 알림 전송
+   - **DISABLED**: 화면 변화를 감지하지만 알림을 보내지 않음
+
+3. 토글 상태는 콘솔에 실시간으로 표시됩니다.
+
+4. Anti-AFK 키 입력은 토글 상태와 관계없이 계속 동작합니다.
+
+**지원되는 단축키 조합**: ctrl, alt, shift와 일반 키의 조합 (예: ctrl + [, alt + f9, ctrl + shift + space)
 
 ## License
 
