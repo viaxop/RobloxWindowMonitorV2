@@ -12,6 +12,7 @@
 - **GIF 자동 생성 및 전송**: 화면 변화가 감지되면, 직전까지의 상황이 녹화된 GIF 애니메이션을 생성하여 Discord 웹훅으로 전송합니다.
 - **안정적인 윈도우 처리**: 로블록스 창을 닫았다가 다시 실행해도 자동으로 새로운 창을 찾아 모니터링을 재개합니다.
 - **화면 깨짐 방지**: 캡처된 화면이 비정상적인 흰색 화면일 경우, 이를 감지하고 재시도하여 오탐을 줄입니다.
+- **Anti-AFK 키 입력**: 설정된 간격으로 자동으로 키를 입력하여 로블록스 게임이 비활성화로 인해 종료되는 것을 방지합니다.
 
 ## 동작 방식
 
@@ -19,14 +20,15 @@
 2.  `password` 값으로 인증 서버에 인증을 요청합니다. 인증에 실패하거나 비밀번호가 없으면 프로그램이 종료됩니다.
 3.  `WINDOWSCLIENT` 클래스와 `Roblox` 창 제목을 가진 윈도우를 찾습니다.
 4.  윈도우를 찾으면, 백그라운드 스레드를 실행하여 `auto_screenshot_interval` 간격으로 전체 화면을 캡처해 메모리에 순차적으로 저장합니다. (`gif_generate_image_count` 개수만큼 유지)
-5.  메인 루프에서는 `interval_seconds` 간격으로 `screen_position`에 지정된 특정 영역만 캡처합니다.
-6.  이전 캡처본과 현재 캡처본의 구조적 유사도(SSIM)를 비교합니다.
-7.  유사도가 `similarity_percent` 임계값 미만으로 떨어지면(화면 변화 감지), 다음과 같은 동작을 수행합니다:
+5.  **Anti-AFK 기능**: `key_press_interval_minutes`와 `key_press_code`가 설정된 경우, 별도의 스레드에서 지정된 간격으로 로블록스 창에 키를 입력하여 게임이 비활성화로 인해 종료되는 것을 방지합니다.
+6.  메인 루프에서는 `interval_seconds` 간격으로 `screen_position`에 지정된 특정 영역만 캡처합니다.
+7.  이전 캡처본과 현재 캡처본의 구조적 유사도(SSIM)를 비교합니다.
+8.  유사도가 `similarity_percent` 임계값 미만으로 떨어지면(화면 변화 감지), 다음과 같은 동작을 수행합니다:
     -   변화가 감지된 시점의 전체 화면을 캡처합니다.
     -   "Change detected" 메시지와 함께 전체 화면 스크린샷을 Discord 웹훅으로 전송합니다.
     -   메모리에 저장된 최근 스크린샷들을 사용해 GIF 파일을 생성합니다.
     -   생성된 GIF 파일을 Discord 웹훅으로 추가 전송합니다.
-8.  설정된 `interval_seconds` 간격으로 5~7번 과정을 반복합니다.
+9.  설정된 `interval_seconds` 간격으로 6~8번 과정을 반복합니다.
 
 ## `config.ini` 설정
 
@@ -43,6 +45,8 @@ auto_screenshot_interval = 0.5
 gif_generate_image_count = 20
 brightness_threshold = 200
 white_screen_threshold = 0.8
+key_press_interval_minutes = 15
+key_press_code = b
 ```
 
 | 설정 항목 | 설명 | 기본값 |
@@ -56,6 +60,9 @@ white_screen_threshold = 0.8
 | `gif_generate_image_count` | GIF 생성에 사용할 최근 스크린샷의 최대 개수입니다. | `20` |
 | `brightness_threshold` | 흰색 화면을 판단하는 밝기 임계값입니다. (0-255) | `200` |
 | `white_screen_threshold` | 이미지가 흰색 화면으로 간주될 밝은 픽셀의 비율(0.0-1.0)입니다. | `0.8` |
+| `key_press_interval_minutes` | **(선택)** Anti-AFK 키 입력 간격(분)입니다. 0이면 비활성화됩니다. | `15` |
+| `key_press_code` | **(선택)** Anti-AFK에서 입력할 키 코드입니다. (a-z, 0-9, f1-f12 등) | `b` |
+
 
 ## Discord 알림 예시
 
