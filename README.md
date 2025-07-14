@@ -70,6 +70,10 @@ white_screen_threshold = 0.8
 
 ## 실행 방법
 
+Github 파일 용량 제한으로 20메가씩 분할 압축이 되어있으니 `반디집`과 같은 프로그램으로 압축을 해제 하시기 바랍니다.
+
+압축이 정상 해제되면 RobloxWindowMonitorV2.exe 파일을 확인할 수 있습니다.
+
 ```bash
 윈도우 탐색기 에서 RobloxWindowMonitorV2.exe 더블 클릭
 또는 cmd 창을 열어 RobloxWindowMonitorV2.exe 실행
